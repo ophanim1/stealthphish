@@ -277,18 +277,13 @@ func (ps *PhishingServer) PhishHandler(w http.ResponseWriter, r *http.Request) {
 		customNotFound(w, r)
 		return
 	}
-	username, password, ok := r.BasicAuth()
-	if !ok {
+	switch {
+	case r.Method == "GET":
 		err = rs.HandleClickedLink(d)
 		if err != nil {
 			log.Error(err)
 		}
-	} else {
-		// d contains a Payload member of type net.url.Values
-		// which itself is just map[string][]string
-		// Manually overwrite it with basic auth data
-		payload := map[string][]string{"Username": []string{username}, "Password": []string{password}}
-		d.Payload = payload
+	case r.Method == "POST":
 		err = rs.HandleFormSubmit(d)
 		if err != nil {
 			log.Error(err)
