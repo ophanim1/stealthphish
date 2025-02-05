@@ -10,7 +10,7 @@ Stealthphish - A modded version of GoPhish to improve stealthyness
 Changes (Credits: https://www.sprocketsecurity.com/blog/never-had-a-bad-day-phishing-how-to-set-up-gophish-to-evade-security-controls )
 
 
-    -  Modified email headers sent by default to not include the word “GoPhish.”
+    - Modified email headers sent by default to not include the word “GoPhish.”
     - Modified the server name sent in browser and with emails to the value “IGNORE”
     - Changed our 404.html page to be a bit more complex and harder to fingerprint
     - Changed web server headers to appear real as opposed to the simple defaults included with GoPhish
