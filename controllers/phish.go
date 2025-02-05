@@ -22,7 +22,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jordan-wright/unindexed"
-	bm "github.com/microcosm-cc/bluemonday"
 )
 
 // ErrInvalidRequest is thrown when a request with an invalid structure is
@@ -328,25 +327,28 @@ func (ps *PhishingServer) PhishHandler(w http.ResponseWriter, r *http.Request) {
 
 // Modified http auth version
 func renderPhishResponse(w http.ResponseWriter, r *http.Request, ptx models.PhishingTemplateContext, p models.Page) {
-	_, _, ok := r.BasicAuth()
-	// If the request contains a Basic Auth header, send the user to the redirect URL
-	// TODO: Enforce existence of a redirect URL
-	if ok {
-		redirectURL, err := models.ExecuteTemplate(p.RedirectURL, ptx)
-		if err != nil {
-			log.Error(err)
-			customNotFound(w, r)
+	// If the request was a form submit and a redirect URL was specified, we
+	// should send the user to that URL
+	if r.Method == "POST" {
+		if p.RedirectURL != "" {
+			redirectURL, err := models.ExecuteTemplate(p.RedirectURL, ptx)
+			if err != nil {
+				log.Error(err)
+				http.NotFound(w, r)
+				return
+			}
+			http.Redirect(w, r, redirectURL, http.StatusFound)
 			return
 		}
-		http.Redirect(w, r, redirectURL, http.StatusFound)
+	}
+	// Otherwise, we just need to write out the templated HTML
+	html, err := models.ExecuteTemplate(p.HTML, ptx)
+	if err != nil {
+		log.Error(err)
+		http.NotFound(w, r)
 		return
 	}
-	// Otherwise, send a response containing the WWW-Authenticate header and
-	// render the template as string there
-	stp := bm.StripTagsPolicy()
-	w.Header().Add("WWW-Authenticate", fmt.Sprintf(`Basic realm="%s"`, stp.Sanitize(p.HTML)))
-	w.WriteHeader(http.StatusUnauthorized)
-	w.Write([]byte(`{"message": "You are not authorized to view this page."}`))
+	w.Write([]byte(html))
 }
 
 // RobotsHandler prevents search engines, etc. from indexing phishing materials
