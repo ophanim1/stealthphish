@@ -107,7 +107,7 @@ func customNotFound(w http.ResponseWriter, r *http.Request) {
 	var b bytes.Buffer
 	err = tmpl404.Execute(&b, "")
 	if err != nil {
-		http.NotFound(w, r)
+		customNotFound(w, r)
 		return
 	}
 	customError(w, b.String(), http.StatusNotFound)
@@ -334,7 +334,7 @@ func renderPhishResponse(w http.ResponseWriter, r *http.Request, ptx models.Phis
 			redirectURL, err := models.ExecuteTemplate(p.RedirectURL, ptx)
 			if err != nil {
 				log.Error(err)
-				http.NotFound(w, r)
+				customNotFound(w, r)
 				return
 			}
 			http.Redirect(w, r, redirectURL, http.StatusFound)
@@ -345,7 +345,7 @@ func renderPhishResponse(w http.ResponseWriter, r *http.Request, ptx models.Phis
 	html, err := models.ExecuteTemplate(p.HTML, ptx)
 	if err != nil {
 		log.Error(err)
-		http.NotFound(w, r)
+		customNotFound(w, r)
 		return
 	}
 	w.Write([]byte(html))
