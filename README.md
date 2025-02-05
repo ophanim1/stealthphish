@@ -1,41 +1,44 @@
-![gophish logo](https://raw.github.com/gophish/gophish/master/static/images/gophish_purple.png)
+![stealthphish logo](https://raw.github.com/ophanim1/stealthphish/master/static/images/stealthfish_purple.png)
 
 Stealthphish - A modded version of GoPhish to improve stealthyness
 =======
 
+**IMPORTANT: This is a modified version of the original [GoPhish](https://github.com/gophish/gophish) project created by Jordan Wright. This fork includes security and stealth enhancements but is not affiliated with or endorsed by the original GoPhish team.**
+
 ![Build Status](https://github.com/gophish/gophish/workflows/CI/badge.svg) [![GoDoc](https://godoc.org/github.com/gophish/gophish?status.svg)](https://godoc.org/github.com/gophish/gophish)
 
 ```
-##Warning! This is NOT the original Gophish project! This is a modded version to improve undetectability of phishing campaigns.
-Changes (Credits: https://www.sprocketsecurity.com/blog/never-had-a-bad-day-phishing-how-to-set-up-gophish-to-evade-security-controls )
+## Security Enhancements
+The following modifications have been made to the original GoPhish project (Credits: https://www.sprocketsecurity.com/blog/never-had-a-bad-day-phishing-how-to-set-up-gophish-to-evade-security-controls):
 
-
-    - Modified email headers sent by default to not include the word “GoPhish.”
-    - Modified the server name sent in browser and with emails to the value “IGNORE”
+    - Modified email headers sent by default to not include the word "GoPhish."
+    - Modified the server name sent in browser and with emails to the value "IGNORE"
     - Changed our 404.html page to be a bit more complex and harder to fingerprint
     - Changed web server headers to appear real as opposed to the simple defaults included with GoPhish
     - Changed the tracking parameter included in phishing links to track user clicks
 ```
 
-
-Gophish: Open-Source Phishing Toolkit
-
-[Gophish](https://getgophish.com) is an open-source phishing toolkit designed for businesses and penetration testers. It provides the ability to quickly and easily setup and execute phishing engagements and security awareness training.
+About the Original GoPhish
+-------
+[GoPhish](https://getgophish.com) is an open-source phishing toolkit designed for businesses and penetration testers. It provides the ability to quickly and easily setup and execute phishing engagements and security awareness training.
 
 ### Install
+**Note: This version does not include already compiled GoPhish binaries.**
 
-Installation of Gophish is dead-simple - just download and extract the zip containing the [release for your system](https://github.com/gophish/gophish/releases/), and run the binary. Gophish has binary releases for Windows, Mac, and Linux platforms.
+~~Installation of Gophish is dead-simple - just download and extract the zip containing the [release for your system](https://github.com/gophish/gophish/releases/), and run the binary. Gophish has binary releases for Windows, Mac, and Linux platforms.~~
 
 ### Building From Source
-**If you are building from source, please note that Gophish requires Go v1.10 or above!**
+**Note: Building from source requires Go v1.10 or above!**
 
-To build Gophish from source, simply run ```git clone https://github.com/gophish/gophish.git``` and ```cd``` into the project source directory. Then, run ```go build```. After this, you should have a binary called ```gophish``` in the current directory.
+To build from source, run ```git clone https://github.com/ophanim1/stealthphish.git``` and ```cd``` into the project source directory. Then, run ```go build```. After this, you should have a binary called ```gophish``` in the current directory.
 
 ### Docker
-You can also use Gophish via the official Docker container [here](https://hub.docker.com/r/gophish/gophish/).
+**Note: This version does not have an official Docker container.**
+
+~~You can also use Gophish via the official Docker container [here](https://hub.docker.com/r/gophish/gophish/).~~
 
 ### Setup
-After running the Gophish binary, open an Internet browser to https://localhost:3333 and login with the default username and password listed in the log output.
+After running the Gophish binary, open an Internet browser to https://localhost:3333. Change this in the config.json file to https://0.0.0.0:3333 to access the web interface from other machines on the network (you are going to get an https warning, but you can ignore that). Then login with the default username and password listed in the log output.
 e.g.
 ```
 time="2020-07-29T01:24:08Z" level=info msg="Please login with the username admin and the password 4304d5255378177d"
@@ -45,7 +48,7 @@ Releases of Gophish prior to v0.10.1 have a default username of `admin` and pass
 
 ### Documentation
 
-Documentation can be found on our [site](http://getgophish.com/documentation). Find something missing? Let us know by filing an issue!
+Documentation can be found on the  [original GoPhish site](http://getgophish.com/documentation). Find something missing? Let them know by filing an issue!
 
 ### Issues
 
@@ -53,7 +56,7 @@ Find a bug? Want more features? Find something missing in the documentation? Let
 
 ### License
 ```
-Gophish - Open-Source Phishing Framework
+This modified version is based on Gophish - Open-Source Phishing Framework
 
 The MIT License (MIT)
 
@@ -77,3 +80,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
+
+### Whitelabeling
+To customize the appearance of this application for your organization, you can modify the following assets:
+
+#### Images
+All images are located in `static/images/`:
+
+- `gophish_purple.png` (994x298) - Main logo used in the login page and documentation
+- `logo.png` (175x200) - Standard logo used throughout the application
+- `logo_purple.png` (175x200) - Purple variant of the main logo
+- `logo_small.png` (40x46) - Small version of the logo used in navigation
+- `logo_inv_small.png` (35x40) - Inverted small logo for dark backgrounds
+- `favicon.ico` (16x16) - Browser favicon
+- `pixel.png` (1x1) - Tracking pixel for email opens
+
+To whitelabel:
+1. Replace these images with your own versions, maintaining the same dimensions
+2. Update the color scheme by modifying the CSS files in `static/css/`
+3. Ensure your replacement tracking pixel (`pixel.png`) remains a 1x1 transparent PNG
+
+Note: After replacing images, you may need to clear your browser cache to see the changes.
